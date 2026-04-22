@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head(${blog.title})}"></head>
+<body data-page="blog-detail">
+<div th:replace="~{fragments/nav :: nav(${learner})}"></div>
+
+<main class="container section-gap">
+    <article class="panel reveal blog-detail-panel">
+        <p class="eyebrow">Learners Blog</p>
+        <h1 th:text="${blog.title}">Blog title</h1>
+
+        <p class="meta-row light">
+            <span th:text="|By @${blog.author}|">By @learner</span>
+            <span th:text="${#temporals.format(blog.createdAt, 'dd MMM yyyy HH:mm')}">14 Apr 2026</span>
+        </p>
+
+        <img class="blog-hero" th:src="${blog.coverImageUrl}" src="/images/learning-path.svg"
+             th:alt="|${blog.title} cover|" alt="Learner blog cover"/>
+
+        <div class="blog-content" th:utext="${blog.contentHtml}"></div>
+    </article>
+
+    <section class="section-gap reveal" th:if="${!#lists.isEmpty(recentBlogs)}">
+        <div class="section-head">
+            <h2>More From Learners</h2>
+            <a class="text-link" th:href="@{/}">Back to home</a>
+        </div>
+
+        <div class="blog-grid">
+            <article class="course-card blog-card" th:each="item : ${recentBlogs}">
+                <img class="course-card-image" th:src="${item.coverImageUrl}" src="/images/learning-path.svg"
+                     th:alt="|${item.title} cover|" alt="Learner blog cover"/>
+                <h3 th:text="${item.title}">Other learner blog</h3>
+                <p th:text="${item.summary}">Summary</p>
+                <a class="button tiny" th:href="@{/learner/blog/{slug}(slug=${item.slug})}">Read Blog</a>
+            </article>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script type="module" th:src="@{/js/app.js}" src="/js/app.js"></script>
+</body>
+</html>

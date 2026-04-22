@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Glowlogics Learning | Login')}"></head>
+<body data-page="login">
+<div th:replace="~{fragments/nav :: nav(${learner})}"></div>
+
+<main class="container auth-shell reveal">
+    <section class="auth-card">
+        <h1>Welcome back</h1>
+        <p>Login to enroll in courses, sync progress, and generate certificates.</p>
+
+        <div class="state-block success" th:if="${signupSuccess}" th:text="${signupSuccess}">Account created.</div>
+        <div class="state-block error" th:if="${param.error}">Invalid username or password.</div>
+        <div class="state-block" th:if="${param.logout}">You have been logged out.</div>
+
+        <form method="post" th:action="@{/login}" class="stack-form">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <label for="username">Username</label>
+            <input id="username" name="username" autocomplete="username" required/>
+
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" autocomplete="current-password" required/>
+
+            <button class="button" type="submit">Login</button>
+        </form>
+
+        <p class="helper-text">No account? <a th:href="@{/signup}">Sign up here</a>.</p>
+        <p class="helper-text">Demo accounts: <strong>learner / Learner@123</strong> and <strong>admin / Admin@123</strong>.</p>
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script type="module" th:src="@{/js/app.js}" src="/js/app.js"></script>
+</body>
+</html>

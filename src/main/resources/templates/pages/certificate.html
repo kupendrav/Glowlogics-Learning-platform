@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Glowlogics Learning | Certificate')}"></head>
+<body data-page="certificate">
+<div th:replace="~{fragments/nav :: nav(${learner})}"></div>
+
+<main class="container section-gap reveal">
+    <section class="certificate-frame">
+        <p class="eyebrow">Certificate of Completion</p>
+        <h1>This certifies that</h1>
+        <h2 th:text="${learnerName}">Learner</h2>
+        <p>has successfully completed the course</p>
+        <h3 th:text="${course.title}">Course Title</h3>
+        <p class="certificate-meta">
+            Issued on <span th:text="${issuedDate}">2026-04-14</span> · Glowlogics Learning Platform
+        </p>
+        <a class="button" th:href="@{/dashboard}">Back to Dashboard</a>
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script type="module" th:src="@{/js/app.js}" src="/js/app.js"></script>
+</body>
+</html>

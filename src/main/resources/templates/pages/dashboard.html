@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Glowlogics Learning | My Courses')}"></head>
+<body data-page="dashboard">
+<div th:replace="~{fragments/nav :: nav(${learner})}"></div>
+
+<main class="container section-gap">
+    <section class="page-intro reveal">
+        <h1>My Courses</h1>
+        <p>
+            Track enrollment status, lesson completion, and certificate eligibility.
+            Completed courses: <strong th:text="${completedCourseCount}">0</strong>
+        </p>
+    </section>
+
+    <section class="reveal">
+        <div class="state-block error" th:if="${dashboardError}" th:text="${dashboardError}">Error</div>
+
+        <div class="state-block" th:if="${#lists.isEmpty(progressViews)}">
+            <p>You are not enrolled in any courses yet.</p>
+            <a class="button" th:href="@{/courses}">Browse Courses</a>
+        </div>
+
+        <div class="course-grid" th:unless="${#lists.isEmpty(progressViews)}">
+            <article class="course-card" th:each="item : ${progressViews}">
+                <h2 th:text="${item.courseTitle}">Course title</h2>
+                <p>
+                    <span th:text="${item.completedLessons}">0</span>
+                    /
+                    <span th:text="${item.totalLessons}">0</span>
+                    lessons completed
+                </p>
+                <div class="progress-bar small"><span th:style="|width:${item.progressPercent}%|"></span></div>
+                <p class="progress-text" th:text="|${item.progressPercent}% complete|">0% complete</p>
+
+                <div class="dashboard-actions">
+                    <a class="button tiny ghost" th:href="@{/courses/{slug}(slug=${item.courseSlug})}">Continue Learning</a>
+                    <a class="button tiny" th:if="${item.progressPercent == 100}" th:href="@{/certificates/{id}(id=${item.courseId})}">
+                        Get Certificate
+                    </a>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script type="module" th:src="@{/js/app.js}" src="/js/app.js"></script>
+</body>
+</html>

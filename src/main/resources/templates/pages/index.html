@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Glowlogics Learning | Home')}"></head>
+<body data-page="home">
+<div th:replace="~{fragments/nav :: nav(${learner})}"></div>
+
+<main>
+    <section class="hero-section">
+        <div class="container hero-grid reveal">
+            <div>
+                <p class="eyebrow">Project-based learning platform</p>
+                <h1>Build career-ready skills with interactive course journeys.</h1>
+                <p class="hero-copy">
+                    Browse <strong th:text="${courseCount}">10</strong> curated courses, enroll instantly,
+                    track lesson completion, and unlock certificates when your roadmap is complete.
+                </p>
+                <div class="hero-actions">
+                    <a class="button" th:href="@{/courses}">Explore Courses</a>
+                    <a class="button ghost" th:href="@{/signup}" th:if="${!authenticated}">Create Account</a>
+                    <a class="button ghost" th:href="@{/dashboard}" th:if="${authenticated}">Go To My Courses</a>
+                </div>
+            </div>
+            <div class="hero-panel">
+                <p class="hero-panel-title">Today on Glowlogics</p>
+                <img class="hero-illustration" th:src="@{/images/learning-path.svg}" src="/images/learning-path.svg" alt="Learning path roadmap"/>
+                <ul>
+                    <li>Live progress tracking with local persistence</li>
+                    <li>YouTube lesson player with notes and free resources</li>
+                    <li>Discord support: <a class="discord-link" href="https://discord.gg/uuqdBbgc" target="_blank" rel="noopener"><span aria-hidden="true">&#128172;</span><span>Join community</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="container section-gap reveal">
+        <div class="section-head">
+            <h2>Featured Courses</h2>
+            <a class="text-link" th:href="@{/courses}">See full catalog</a>
+        </div>
+
+        <div class="course-grid">
+            <article class="course-card" th:each="course : ${featuredCourses}">
+                <img class="course-card-image" th:src="${course.imageUrl}" src="/images/learning-path.svg"
+                     th:alt="|${course.title} cover|" alt="Course cover"/>
+
+                <p class="meta-row">
+                    <span th:text="${course.category}">Category</span>
+                    <span th:text="${course.duration}">Duration</span>
+                </p>
+                <h3 th:text="${course.title}">Course title</h3>
+                <p th:text="${course.description}">Course description</p>
+                <a class="button tiny" th:href="@{/courses/{slug}(slug=${course.slug})}">Open Course</a>
+            </article>
+        </div>
+    </section>
+
+    <section class="container section-gap reveal">
+        <div class="section-head">
+            <h2>Learners Blog</h2>
+            <a class="text-link" th:if="${authenticated}" th:href="@{/learner/blog/write}">Write a blog</a>
+        </div>
+
+        <div class="state-block" th:if="${#lists.isEmpty(learnerBlogs)}">
+            <p>No learner blogs yet. Be the first one to publish.</p>
+            <a class="button tiny" th:if="${authenticated}" th:href="@{/learner/blog/write}">Create Blog</a>
+        </div>
+
+        <div class="blog-grid" th:unless="${#lists.isEmpty(learnerBlogs)}">
+            <article class="course-card blog-card" th:each="blog : ${learnerBlogs}">
+                <img class="course-card-image" th:src="${blog.coverImageUrl}" src="/images/learning-path.svg"
+                     th:alt="|${blog.title} cover|" alt="Learner blog cover"/>
+
+                <p class="meta-row light">
+                    <span th:text="|@${blog.author}|">@learner</span>
+                    <span th:text="${#temporals.format(blog.createdAt, 'dd MMM yyyy')}">01 Jan 2026</span>
+                </p>
+
+                <h3 th:text="${blog.title}">Learner blog title</h3>
+                <p th:text="${blog.summary}">Learner blog summary</p>
+
+                <a class="button tiny" th:href="@{/learner/blog/{slug}(slug=${blog.slug})}">Read Blog</a>
+            </article>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script type="module" th:src="@{/js/app.js}" src="/js/app.js"></script>
+</body>
+</html>

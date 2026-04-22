@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<header class="site-header" th:fragment="nav(learner)">
+    <div class="container nav-shell">
+        <a class="brand" th:href="@{/}">
+            <img class="brand-logo" th:src="@{/images/logo.png}" src="/images/logo.png" alt="Glow logics logo"/>
+            <span class="brand-name">Glow logics</span>
+        </a>
+
+        <button id="menu-toggle" class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
+            Menu
+        </button>
+
+        <nav id="primary-nav" class="nav-links">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/courses}">Courses</a>
+            <a th:if="${authenticated}" th:href="@{/dashboard}">My Courses</a>
+            <a th:if="${isAdmin}" th:href="@{/admin/courses}">Admin</a>
+        </nav>
+
+        <div class="nav-cta">
+            <div class="learner-menu" th:if="${authenticated}">
+                <button type="button" id="learner-menu-toggle" class="identity-chip learner-menu-toggle"
+                        aria-expanded="false" aria-controls="learner-menu-list" th:text="|@${learner}|">@learner</button>
+                <div id="learner-menu-list" class="learner-menu-list" role="menu">
+                    <a th:href="@{/learner/blog/write}" role="menuitem">Write a blog</a>
+                </div>
+            </div>
+            <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false">
+                <span class="theme-icon theme-icon-sun" aria-hidden="true">&#9728;</span>
+                <span class="theme-icon theme-icon-moon" aria-hidden="true">&#9790;</span>
+            </button>
+
+            <a th:if="${!authenticated}" class="button tiny ghost" th:href="@{/login}">Login</a>
+            <a th:if="${!authenticated}" class="button tiny" th:href="@{/signup}">Sign up</a>
+
+            <form th:if="${authenticated}" method="post" th:action="@{/logout}" class="logout-form">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit" class="button tiny ghost">Logout</button>
+            </form>
+        </div>
+    </div>
+</header>
+</body>
+</html>

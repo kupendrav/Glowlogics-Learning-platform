@@ -1,0 +1,21 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  thymeleaf:
+    cache: false
+
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    root: INFO
+    com.glowlogics.learningplatform: INFO

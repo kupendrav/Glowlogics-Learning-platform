@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Glowlogics Learning | Write Blog')}"></head>
+<body data-page="blog-write">
+<div th:replace="~{fragments/nav :: nav(${learner})}"></div>
+
+<main class="container section-gap">
+    <section class="page-intro reveal">
+        <p class="eyebrow">Learners Blog</p>
+        <h1>Write a blog</h1>
+        <p>Share your learning journey, format with headings and subheadings, and add image links where needed.</p>
+    </section>
+
+    <section class="panel reveal">
+        <div class="state-block error" th:if="${blogError}" th:text="${blogError}">Error</div>
+
+        <form method="post" th:action="@{/learner/blog}" class="stack-form blog-form">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+            <label for="blog-title">Title</label>
+            <input id="blog-title" name="title" maxlength="120" required placeholder="Example: How I built my first Java API"
+                   th:value="${blogTitle}"/>
+
+            <label for="blog-cover-image">Cover image URL (optional)</label>
+            <input id="blog-cover-image" type="url" name="coverImage" placeholder="https://images.pexels.com/..."
+                   th:value="${blogCoverImage}"/>
+
+            <div class="editor-toolbar" role="toolbar" aria-label="Formatting tools">
+                <button type="button" class="button tiny ghost" data-editor-action="h2">Heading</button>
+                <button type="button" class="button tiny ghost" data-editor-action="h3">Subheading</button>
+                <button type="button" class="button tiny ghost" data-editor-action="image">Add image</button>
+            </div>
+
+            <label for="blog-editor">Content</label>
+            <textarea id="blog-editor" class="blog-editor" name="content" required
+                      placeholder="Write your story...&#10;&#10;## What I learned&#10;### Key challenges&#10;![Architecture diagram](https://images.pexels.com/...)"
+                      th:text="${blogContent}"></textarea>
+
+            <p class="helper-text">Formatting supported: "## Heading", "### Subheading", and "![Alt text](https://image-url)".</p>
+            <p id="editor-count" class="helper-text">0 / 12000</p>
+
+            <button class="button" type="submit">Publish Blog</button>
+        </form>
+
+        <div class="blog-preview-wrap">
+            <p class="small-title">Live Preview</p>
+            <article id="blog-preview" class="blog-content"></article>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script type="module" th:src="@{/js/app.js}" src="/js/app.js"></script>
+</body>
+</html>

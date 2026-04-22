@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head(${course.title})}"></head>
+<body data-page="course-detail">
+<div th:replace="~{fragments/nav :: nav(${learner})}"></div>
+
+<main class="container section-gap" th:attr="data-course-id=${course.id},data-authenticated=${authenticated}">
+    <section class="page-intro reveal">
+        <p class="eyebrow" th:text="${course.category}">Category</p>
+        <h1 th:text="${course.title}">Course</h1>
+        <p th:text="${course.description}">Description</p>
+
+        <div class="meta-row">
+            <span th:text="${course.duration}">16 weeks</span>
+            <span th:text="${course.level}">Beginner</span>
+            <a class="discord-link" th:href="${course.discordInviteUrl}" target="_blank" rel="noopener">
+                <span aria-hidden="true">&#128172;</span>
+                <span>Discord connect</span>
+            </a>
+        </div>
+    </section>
+
+    <section class="panel reveal">
+        <h2>Artecraft Roadmap</h2>
+        <ol class="roadmap-list">
+            <li th:each="step : ${course.roadmap}" th:text="${step}">Roadmap step</li>
+        </ol>
+    </section>
+
+    <section class="panel lesson-panel reveal" th:attr="data-course-id=${course.id},data-initial-progress=${currentProgress}">
+        <div class="row between wrap">
+            <h2>Lesson Completion Simulator</h2>
+            <button class="button" id="enroll-btn" th:disabled="${!authenticated}" th:title="${!authenticated} ? 'Login to enroll' : ''">
+                Enroll in this course
+            </button>
+        </div>
+
+        <div class="state-block" th:if="${!authenticated}">
+            Login is required for enrollment and progress sync.
+            <a class="text-link" th:href="@{/login}">Login now</a>
+        </div>
+
+        <div class="state-block" id="course-message"></div>
+
+        <div class="lesson-nav" th:if="${!#lists.isEmpty(course.lessons)}">
+            <button type="button" id="lesson-prev" class="lesson-arrow" aria-label="Show previous lesson">
+                <span aria-hidden="true">&#8592;</span>
+                <span>Previous</span>
+            </button>
+
+            <p id="lesson-position" class="lesson-position">1 / 1</p>
+
+            <button type="button" id="lesson-next" class="lesson-arrow" aria-label="Show next lesson">
+                <span>Next</span>
+                <span aria-hidden="true">&#8594;</span>
+            </button>
+        </div>
+
+        <div class="lesson-list">
+            <article th:each="lesson : ${course.lessons}" class="lesson-item">
+                <div class="lesson-head">
+                    <h3 th:text="${lesson.title}">Lesson title</h3>
+                    <label class="inline-check">
+                        <input type="checkbox" class="lesson-check" th:disabled="${!authenticated}" th:attr="data-lesson-id=${lesson.id}"/>
+                        <span>Mark as completed</span>
+                    </label>
+                </div>
+
+                <div class="video-shell">
+                    <iframe th:src="${lesson.videoUrl}" title="Lesson video" loading="lazy"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                </div>
+
+                <p class="notes" th:text="${lesson.notes}">Detailed notes</p>
+
+                <div>
+                    <p class="small-title">Free Resources</p>
+                    <ul class="resource-list">
+                        <li th:each="resource : ${lesson.resources}">
+                            <a th:href="${resource.url}" th:text="${resource.title}" target="_blank" rel="noopener">Resource</a>
+                        </li>
+                    </ul>
+                </div>
+            </article>
+        </div>
+
+        <div class="progress-wrap">
+            <div class="progress-bar"><span id="progress-fill" th:style="|width:${currentProgress}%|"></span></div>
+            <p id="progress-label" th:text="|Progress: ${currentProgress}%|">Progress: 0%</p>
+        </div>
+
+        <a id="certificate-link" class="button tiny" style="display:none;" th:href="@{/certificates/{courseId}(courseId=${course.id})}">
+            View Certificate
+        </a>
+    </section>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script type="module" th:src="@{/js/app.js}" src="/js/app.js"></script>
+</body>
+</html>
