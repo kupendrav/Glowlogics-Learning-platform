@@ -382,6 +382,10 @@ iframe {
   padding: 1.9rem;
 }
 
+.panel + .panel {
+  margin-top: 1rem;
+}
+
 .section-head {
   display: flex;
   justify-content: space-between;
@@ -909,7 +913,6 @@ iframe {
 .reveal.revealed {
   opacity: 1;
   transform: translateY(0);
-  margin: 5px 5px 15px;
 }
 
 .cursor-dot {
